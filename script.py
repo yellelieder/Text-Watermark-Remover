@@ -29,14 +29,21 @@ def inpaint_text(img_path, pipeline):
         
         cv2.line(mask, (x_mid0, y_mid0), (x_mid1, y_mi1), 255,    
         thickness)
-        img = cv2.inpaint(img, mask, 7, cv2.INPAINT_NS)  
+        
+        #we can try to change them, for INPAINT_NS we could also use INPAINT_TELEA or INPAINT_CB
+        #the kernel size second param can also be adjusted to determine the size of the neighborhood
+        img = cv2.inpaint(img, mask, 4, cv2.INPAINT_NS)  
     return(img)
 
+def remove_watermark(img_path):
+    pipeline = keras_ocr.pipeline.Pipeline()
+    img=inpaint_text(img_path, pipeline)
+    return cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+    
 
 if __name__ =="__main__":
-    pipeline = keras_ocr.pipeline.Pipeline()
     input_folder_path = 'input_folder'
     for filename in os.listdir(input_folder_path):
-        img=inpaint_text(f"{input_folder_path}/{filename}", pipeline)
-        img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-        cv2.imwrite(f"clean_images/{filename}",img_rgb)
+        img=remove_watermark(f"{input_folder_path}/{filename}")
+        cv2.imwrite(f"clean_images/{filename}",img)
+    
