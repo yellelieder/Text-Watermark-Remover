@@ -32,7 +32,7 @@ def inpaint_text(img_path, pipeline):
         
         #we can try to change them, for INPAINT_NS we could also use INPAINT_TELEA or INPAINT_CB
         #the kernel size second param can also be adjusted to determine the size of the neighborhood
-        img = cv2.inpaint(img, mask, 4, cv2.INPAINT_NS)  
+        img = cv2.inpaint(img, mask, 2, cv2.INPAINT_NS)  
     return(img)
 
 def remove_watermark(img_path):
